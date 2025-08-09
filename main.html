@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SINDRIC LOKO DATA PLUG – Reliable & Non-Expiry Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0072B2 0%, #3a82e0 100%);
+        }
+        .bg-mtn { background-color: #FFCC00; }
+        .text-mtn { color: #FFCC00; }
+        .bg-airteltigo { background-color: #E20613; }
+        .text-airteltigo { color: #E20613; }
+        .bg-telecel { background-color: #660099; }
+        .text-telecel { color: #660099; }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button:hover {
+            opacity: 0.8;
+        }
+        #mtn-tab.active { color: #FFCC00; border-bottom-color: #FFCC00; font-weight: 700; }
+        #airteltigo-tab.active { color: #E20613; border-bottom-color: #E20613; font-weight: 700; }
+        #telecel-tab.active { color: #660099; border-bottom-color: #660099; font-weight: 700; }
+        
+        /* Mobile Menu Styling */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        #mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Modal Styling */
+        #confirmation-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center px-6 py-4">
+            <a href="index.html" class="text-xl font-bold text-[#0072B2] animate-pulse">SINDRIC LOKO DATA PLUG</a>
+            <button id="menu-button" class="md:hidden z-20">
+                <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+            <nav class="hidden md:block">
+                <ul class="flex items-center space-x-8">
+                    <li><a href="index.html" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Home</a></li>
+                    <li><a href="#plans" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Data Plans</a></li>
+                    <li><a href="#how-it-works" class="text-gray-700 hover:text-[#0072B2] transition duration-300">How it works</a></li>
+                    <li><a href="#about" class="text-gray-700 hover:text-[#0072B2] transition duration-300">About us</a></li>
+                    <li><a href="#contact" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <nav id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-40 p-6 pt-20 flex flex-col items-start md:hidden">
+        <button id="close-menu-button" class="absolute top-4 right-4">
+            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <ul id="mobile-menu-links" class="space-y-4 text-xl">
+            <li><a href="index.html" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Home</a></li>
+            <li><a href="#plans" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Data Plans</a></li>
+            <li><a href="#how-it-works" class="text-gray-700 hover:text-[#0072B2] transition duration-300">How it works</a></li>
+            <li><a href="#about" class="text-gray-700 hover:text-[#0072B2] transition duration-300">About us</a></li>
+            <li><a href="#contact" class="text-gray-700 hover:text-[#0072B2] transition duration-300">Contact</a></li>
+        </ul>
+    </nav>
+    
+    <section class="hero-gradient text-white text-center py-20 px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Reliable & Non-Expiry Data Bundles</h1>
+        <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8">Get the cheapest non-expiry data for MTN, AirtelTigo, and Telecel – delivered shortly after payment. Your connection, our priority.</p>
+        <a href="#plans" class="bg-white text-[#0072B2] font-bold py-3 px-6 rounded-full hover:bg-gray-200 transition transform hover:scale-105">
+            Browse Data Plans
+        </a>
+    </section>
+
+    <section id="plans" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12">Choose Your Data Plan</h2>
+
+            <div class="flex justify-center mb-8 border-b border-gray-300">
+                <button onclick="switchNetworkTab('mtn')" id="mtn-tab" class="tab-button active">MTN</button>
+                <button onclick="switchNetworkTab('airteltigo')" id="airteltigo-tab" class="tab-button">AirtelTigo</button>
+                <button onclick="switchNetworkTab('telecel')" id="telecel-tab" class="tab-button">Telecel</button>
+            </div>
+
+            <div id="mtn-plans" class="data-plans-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">1GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 5.5</p>
+                    <button onclick="showConfirmationModal('MTN', '1GB', '5.5', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">2GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 11</p>
+                    <button onclick="showConfirmationModal('MTN', '2GB', '11', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">3GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 16</p>
+                    <button onclick="showConfirmationModal('MTN', '3GB', '16', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">4GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 21</p>
+                    <button onclick="showConfirmationModal('MTN', '4GB', '21', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">5GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 26</p>
+                    <button onclick="showConfirmationModal('MTN', '5GB', '26', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">6GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 31</p>
+                    <button onclick="showConfirmationModal('MTN', '6GB', '31', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">7GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 35</p>
+                    <button onclick="showConfirmationModal('MTN', '7GB', '35', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">8GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 40</p>
+                    <button onclick="showConfirmationModal('MTN', '8GB', '40', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">10GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 49</p>
+                    <button onclick="showConfirmationModal('MTN', '10GB', '49', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">15GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 74</p>
+                    <button onclick="showConfirmationModal('MTN', '15GB', '74', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">20GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 90</p>
+                    <button onclick="showConfirmationModal('MTN', '20GB', '90', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">25GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 112</p>
+                    <button onclick="showConfirmationModal('MTN', '25GB', '112', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">30GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 135</p>
+                    <button onclick="showConfirmationModal('MTN', '30GB', '135', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">40GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 175</p>
+                    <button onclick="showConfirmationModal('MTN', '40GB', '175', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">50GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 215</p>
+                    <button onclick="showConfirmationModal('MTN', '50GB', '215', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">100GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-mtn">GHS 395</p>
+                    <button onclick="showConfirmationModal('MTN', '100GB', '395', 'bg-mtn')" class="w-full bg-mtn text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+            </div>
+
+            <div id="airteltigo-plans" class="data-plans-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 hidden">
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">1GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 4.9</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '1GB', '4.9', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">2GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 9.5</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '2GB', '9.5', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">3GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 14</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '3GB', '14', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">4GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 19</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '4GB', '19', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">5GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 24</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '5GB', '24', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">6GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 29</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '6GB', '29', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">7GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 33</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '7GB', '33', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">8GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 35.5</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '8GB', '35.5', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">10GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 43.5</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '10GB', '43.5', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">15GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 63.5</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '15GB', '63.5', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">20GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 83.5</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '20GB', '83.5', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">30GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 125</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '30GB', '125', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">40GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 165</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '40GB', '165', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">50GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 195</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '50GB', '195', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">100GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-airteltigo">GHS 230</p>
+                    <button onclick="showConfirmationModal('AirtelTigo', '100GB', '230', 'bg-airteltigo')" class="w-full bg-airteltigo text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+            </div>
+
+            <div id="telecel-plans" class="data-plans-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 hidden">
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">5GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 26</p>
+                    <button onclick="showConfirmationModal('Telecel', '5GB', '26', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">10GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 48</p>
+                    <button onclick="showConfirmationModal('Telecel', '10GB', '48', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">15GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 68</p>
+                    <button onclick="showConfirmationModal('Telecel', '15GB', '68', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">20GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 90</p>
+                    <button onclick="showConfirmationModal('Telecel', '20GB', '90', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">25GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 115</p>
+                    <button onclick="showConfirmationModal('Telecel', '25GB', '115', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">30GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 120</p>
+                    <button onclick="showConfirmationModal('Telecel', '30GB', '120', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">40GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 155</p>
+                    <button onclick="showConfirmationModal('Telecel', '40GB', '155', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">50GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 195</p>
+                    <button onclick="showConfirmationModal('Telecel', '50GB', '195', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+                <div class="bg-white p-6 shadow-md rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl text-center">
+                    <h4 class="text-xl font-bold">100GB</h4>
+                    <p class="text-gray-500 text-sm mb-2">Non-Expiry</p>
+                    <p class="text-3xl font-bold my-2 text-telecel">GHS 230</p>
+                    <button onclick="showConfirmationModal('Telecel', '100GB', '230', 'bg-telecel')" class="w-full bg-telecel text-white py-2 px-4 rounded-lg hover:opacity-90 transition">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="bg-gray-200 py-16 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-16 h-16 bg-[#0072B2] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
+                    <h3 class="text-xl font-semibold mb-2">Choose Plan</h3>
+                    <p class="text-gray-600">Select your preferred non-expiry data bundle from our MTN, AirtelTigo or Telecel options.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-16 h-16 bg-[#0072B2] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
+                    <h3 class="text-xl font-semibold mb-2">Confirm & Pay</h3>
+                    <p class="text-gray-600">Fill in your details and pay securely via Paystack. We accept all major cards and mobile money.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-16 h-16 bg-[#0072B2] text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
+                    <h3 class="text-xl font-semibold mb-2">Get Your Data</h3>
+                    <p class="text-gray-600">Your data bundle will be sent to the number you provided shortly after payment confirmation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-16 px-4">
+        <div class="container mx-auto text-center max-w-4xl">
+            <h2 class="text-3xl font-bold mb-4">About SINDRIC LOKO DATA PLUG</h2>
+            <p class="text-lg text-gray-600">
+                We are a trusted provider of affordable, non-expiry data bundles in Ghana. Our mission is to keep you connected with seamless and reliable service, making sure you get the most out of your online experience without the worry of your data expiring. With a focus on speed, security, and exceptional customer service, we're here to be your go-to source for all your data needs.
+            </p>
+        </div>
+    </section>
+
+    <section id="contact" class="py-12 text-center">
+        <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+        <p>Email: <a href="mailto:sindricloko@gmail.com" class="text-[#0072B2] hover:underline">sindricloko@gmail.com</a></p>
+        <p>Phone: <a href="tel:+233598004494" class="text-[#0072B2] hover:underline">+233 59 800 4494</a></p>
+        <p>WhatsApp: <a href="https://wa.me/233598004494" target="_blank" class="text-[#25D366] hover:underline">Chat with us on WhatsApp</a></p>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-400">&copy; 2024 SINDRIC LOKO DATA PLUG. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="confirmation-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full relative">
+            <button id="close-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <h3 class="text-2xl font-bold mb-2 text-center">Confirm Your Purchase</h3>
+            <p class="text-center text-gray-600 mb-6">Please verify the details below before proceeding to payment.</p>
+
+            <div class="space-y-2 mb-6">
+                <div class="flex">
+                    <span class="font-bold w-1/3">Network:</span>
+                    <span id="modal-network" class="w-2/3"></span>
+                </div>
+                <div class="flex">
+                    <span class="font-bold w-1/3">Plan:</span>
+                    <span id="modal-plan" class="w-2/3"></span>
+                </div>
+                <div class="flex">
+                    <span class="font-bold w-1/3">Amount:</span>
+                    <span id="modal-amount" class="w-2/3"></span>
+                </div>
+            </div>
+
+            <form id="payment-form" class="space-y-4">
+                <div>
+                    <label for="phone-number" class="block text-sm font-medium text-gray-700">Phone Number (MTN/AirtelTigo/Telecel)</label>
+                    <input type="tel" id="phone-number" name="phone-number" required placeholder="e.g., 024xxxxxxx" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#0072B2] focus:ring-[#0072B2] p-2">
+                </div>
+                <div>
+                    <label for="customer-email" class="block text-sm font-medium text-gray-700">Email Address (Optional)</label>
+                    <input type="email" id="customer-email" name="customer-email" placeholder="e.g., yourname@example.com" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#0072B2] focus:ring-[#0072B2] p-2">
+                </div>
+
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md mt-4">
+                    <p class="font-bold text-sm text-gray-800">Important Note:</p>
+                    <p class="text-sm text-gray-700">The amount on the next payment page will be shown in pesewas. (e.g., GHS 5.50 = 550.00)</p>
+                </div>
+                
+                <div id="payment-loading-text" class="text-center text-sm text-gray-500 hidden mt-4">
+                    Processing your payment...
+                </div>
+                <button type="submit" id="pay-button" class="w-full text-white py-3 px-4 rounded-md font-bold transition">Pay Now</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="success-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center relative">
+            <h3 class="text-2xl font-bold mb-4 text-green-600">Payment Successful!</h3>
+            <p class="text-gray-600 mb-6">Your order has been received and will be processed shortly.</p>
+            <a href="main.html" class="bg-green-600 text-white py-2 px-4 rounded-md font-bold hover:bg-green-700 transition">Continue Shopping</a>
+        </div>
+    </div>
+
+    <script>
+        const menuButton = document.getElementById('menu-button');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuLinks = document.getElementById('mobile-menu-links').querySelectorAll('a');
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const paymentForm = document.getElementById('payment-form');
+        const payButton = document.getElementById('pay-button');
+        const paymentLoadingText = document.getElementById('payment-loading-text');
+
+        let selectedPlan = null;
+        let selectedNetwork = null;
+        let selectedAmount = null;
+        let selectedBgClass = null;
+
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+        });
+
+        closeMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+        });
+
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentStatus = urlParams.get('payment');
+            if (paymentStatus === 'success') {
+                document.getElementById('success-modal').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('success-modal').classList.add('opacity-100');
+                }, 10);
+            }
+        };
+
+        function switchNetworkTab(network) {
+            const tabs = document.querySelectorAll('.tab-button');
+            const containers = document.querySelectorAll('.data-plans-container');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            containers.forEach(container => container.classList.add('hidden'));
+
+            document.getElementById(`${network}-tab`).classList.add('active');
+            document.getElementById(`${network}-plans`).classList.remove('hidden');
+        }
+
+        function showConfirmationModal(network, plan, amount, bgClass) {
+            selectedNetwork = network;
+            selectedPlan = plan;
+            selectedAmount = amount;
+            selectedBgClass = bgClass;
+
+            document.getElementById('modal-network').textContent = selectedNetwork;
+            document.getElementById('modal-plan').textContent = selectedPlan;
+            document.getElementById('modal-amount').textContent = `GHS ${selectedAmount}`;
+            payButton.className = `w-full text-white py-3 px-4 rounded-md font-bold transition ${selectedBgClass}`;
+            
+            confirmationModal.classList.remove('hidden');
+            setTimeout(() => {
+                confirmationModal.classList.add('opacity-100');
+            }, 10);
+        }
+
+        closeModalButton.addEventListener('click', () => {
+            confirmationModal.classList.remove('opacity-100');
+            setTimeout(() => {
+                confirmationModal.classList.add('hidden');
+            }, 300);
+        });
+
+        paymentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const phoneNumber = document.getElementById('phone-number').value;
+            const customerEmail = document.getElementById('customer-email').value;
+            const amount = selectedAmount;
+
+            if (!phoneNumber || !amount) {
+                alert('Please provide a phone number.');
+                return;
+            }
+
+            payButton.disabled = true;
+            paymentLoadingText.classList.remove('hidden');
+            
+            try {
+                const initResponse = await axios.post('/api/initialize-payment', {
+                    email: customerEmail || 'customer@example.com', // Use a default email if not provided
+                    amount: parseFloat(amount),
+                    network: selectedNetwork,
+                    plan: selectedPlan,
+                    number: phoneNumber
+                });
+                
+                const reference = initResponse.data.reference;
+                
+                const handler = PaystackPop.setup({
+                    key: 'pk_test_XXXXXXXXXXXXXXXXXX',
+                    email: customerEmail || 'customer@example.com',
+                    amount: parseFloat(amount) * 100,
+                    currency: 'GHS',
+                    ref: reference,
+                    callback: async (response) => {
+                        try {
+                            const verifyResponse = await axios.post('/api/verify-payment', {
+                                reference: response.reference,
+                                phone_number: phoneNumber,
+                                network: selectedNetwork,
+                                plan: selectedPlan
+                            });
+                            
+                            if (verifyResponse.data.success) {
+                                window.location.href = `main.html?payment=success`;
+                            } else {
+                                alert('Payment verification failed. Please contact support.');
+                                payButton.disabled = false;
+                                paymentLoadingText.classList.add('hidden');
+                            }
+                        } catch (verificationError) {
+                            console.error('Verification Error:', verificationError);
+                            alert('An error occurred during payment verification. Please try again or contact support.');
+                            payButton.disabled = false;
+                            paymentLoadingText.classList.add('hidden');
+                        }
+                    },
+                    onClose: () => {
+                        alert('Transaction was not completed, window closed.');
+                        payButton.disabled = false;
+                        paymentLoadingText.classList.add('hidden');
+                    },
+                });
+                handler.openIframe();
+            } catch (error) {
+                console.error('Payment Initialization Error:', error);
+                alert('Failed to initiate payment. Please check your details and try again.');
+                payButton.disabled = false;
+                paymentLoadingText.classList.add('hidden');
+            }
+        });
+        
+        switchNetworkTab('mtn');
+    </script>
+</body>
+</html>
