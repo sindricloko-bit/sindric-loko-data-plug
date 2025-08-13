@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Set up the Paystack secret key from Render's environment variables
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
 if (!PAYSTACK_SECRET_KEY) {
@@ -18,14 +19,20 @@ if (!PAYSTACK_SECRET_KEY) {
     process.exit(1);
 }
 
-// Serve static files from the root directory
+// Serve static files from the project root directory
 app.use(express.static(path.join(__dirname, '')));
+
+// Explicitly serve index.html for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Endpoint to handle payment initialization
 app.post('/initialize-payment', async (req, res) => {
     try {
         const { email, amount, phone_number } = req.body;
         
+        // Amount must be in kobo/pesewas (amount * 100)
         const paystackAmount = amount * 100;
         
         const response = await axios.post('https://api.paystack.co/transaction/initialize', {
@@ -40,7 +47,7 @@ app.post('/initialize-payment', async (req, res) => {
                     }
                 ]
             },
-            callback_url: 'https://sindric-loko-data-plug.onrender.com'
+            callback_url: 'https://sindric-loko-data-plug.onrender.com' // Your app's public URL
         }, {
             headers: {
                 Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
