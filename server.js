@@ -19,12 +19,11 @@ if (!PAYSTACK_SECRET_KEY) {
     process.exit(1);
 }
 
-// Serve static files from the project root directory
-app.use(express.static(path.join(__dirname, '')));
-
-// Explicitly serve index.html for the root URL
+// Serve static files. This should be a robust approach for your file structure.
+// This assumes all your static files (like index.html, CSS, JS, etc.) are in a folder called 'public'.
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Endpoint to handle payment initialization
